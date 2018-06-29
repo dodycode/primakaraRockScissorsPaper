@@ -17,20 +17,20 @@
 using namespace std;
 
 void tampilStackDarah(CustomStack<string> darahPemain, CustomStack<string> darahBot) {
-    //munculkan
-    cout<<"Your health: ";
+    // Munculkan status darah
+    cout << "Your health: ";
     while (!darahPemain.isEmpty()) {
         cout << " " << darahPemain.getTop() << " ";
         darahPemain.pop();
     }
-    cout<<endl;
+    cout << endl;
  
-    cout<<"BOT Health: ";
+    cout << "BOT Health: ";
     while (!darahBot.isEmpty()) {
         cout << " " << darahBot.getTop() << " ";
         darahBot.pop();
     }
-    cout<<endl;
+    cout << endl;
 }
 
 void play() {
@@ -58,7 +58,7 @@ void play() {
         cout << "3. Paper" << endl;
         
 		int pil;
-        cout << "PLease choose: "; cin >> pil;
+        cout << "Please choose: "; cin >> pil;
         switch (pil) {
             case 1:
                 cout << "You choose: Scissors" << endl;
@@ -69,7 +69,7 @@ void play() {
                     cout << "Bot choose: Rock" << endl;
                     cout << "-- Oops haha, BOT win! Don't give up!' --" << endl;
                     if (!darahPemain.isEmpty()) {
-                        //kurangi darah pemain
+                        // Kurangi darah pemain
                         darahPemain.pop();
                     } else {
 						break;
@@ -78,7 +78,7 @@ void play() {
                     cout << "Bot choose: Paper" << endl;
                     cout << "-- Wow, you defeat BOT!" <<endl;
                     if (!darahBot.isEmpty()) {
-                        //kurangi darah bot
+                        // Kurangi darah bot
                         darahBot.pop();
                     } else {
                         break;
@@ -94,7 +94,7 @@ void play() {
                     cout << "Bot choose: Scissors" << endl;
                     cout << "-- Wow, you defeat BOT! --" << endl;
                     if (!darahBot.isEmpty()) {
-                        //kurangi darah bot
+                        // Kurangi darah bot
                         darahBot.pop();
                     } else {
                         break;
@@ -106,7 +106,7 @@ void play() {
                     cout << "Bot choose: Paper" << endl;
                     cout << "-- Oops haha, BOT win! Don't give up!' --" << endl;
                     if (!darahPemain.isEmpty()) {
-                        //kurangi darah pemain
+                        // Kurangi darah pemain
                         darahPemain.pop();
                     } else {
                         break;
@@ -122,7 +122,7 @@ void play() {
                     cout << "Bot choose: Scissors" << endl;
                     cout << "-- Oops haha, BOT win! Don't give up!' --" << endl;
                     if (!darahPemain.isEmpty()) {
-                        //kurangi darah pemain
+                        // Kurangi darah pemain
                         darahPemain.pop();
                     } else {
                         break;
@@ -131,7 +131,7 @@ void play() {
                     cout << "Bot choose: Rock" << endl;
                     cout << "-- Wow! You defeat BOT! --" << endl;
                     if (!darahBot.isEmpty()) {
-                        //kurangi darah bot
+                        // Kurangi darah bot
                         darahBot.pop();
                     } else {
                         break;
@@ -152,7 +152,7 @@ void play() {
         system("pause");
     }
     
-    //Setelah game selesai, keluarkan pesan
+    // Setelah game selesai, keluarkan pesan
     cout << endl;
     if (darahPemain.isEmpty()) {
         cout << "Game over!" << endl;
@@ -176,7 +176,7 @@ int main(int argc, char** argv) {
         cout << "Please choose: "; cin >> menu;
         switch (menu) {
             case START_GAME:
-                //Jalankan permainan
+                // Jalankan permainan
                 play();
             break;
  
