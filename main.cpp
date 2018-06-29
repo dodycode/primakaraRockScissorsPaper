@@ -1,6 +1,7 @@
 #include <iostream>
 #include <stdlib.h>
 #include <time.h>
+#include "CustomStack.h"
  
 #define MAXHEALTH 100
  
