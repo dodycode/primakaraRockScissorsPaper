@@ -241,9 +241,9 @@ int main(int argc, char** argv) {
                 //Setelah game selesai, keluarkan pesan
                 cout<<endl;
                 if(empty(darahPemain)){
-                    cout<<"Congrats! You're win!"<<endl;
-                }else if(empty(darahBot)) {
                     cout<<"Game over!"<<endl;
+                }else if(empty(darahBot)) {
+                    cout<<"Congrats! You're win!"<<endl;
                 }else{
                     cout<<"Oops! something went wrong!"<<endl;
                 }
