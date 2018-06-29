@@ -203,7 +203,7 @@ void play(stack *p, stack *b)
                     cout<<"Bot choose: Rock"<<endl;
                     cout<<"-- Wow! You defeat BOT! --"<<endl;
                     if(!empty(*b)){
-                        //kurangi darah pemain
+                        //kurangi darah bot
                         pop(b);
                     }else {
                         break;
