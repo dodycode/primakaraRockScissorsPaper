@@ -43,7 +43,7 @@ void play() {
     	darahBot.push("*");
 	}
  
-    srand(time(NULL));
+    srand(time(0));
     int round = 0;
  
     while (!darahPemain.isEmpty() && !darahBot.isEmpty()){
@@ -60,7 +60,7 @@ void play() {
 		int pil;
         cout << "Please choose: "; cin >> pil;
         switch (pil) {
-            case 1:
+            case SCISSORS:
                 cout << "You choose: Scissors" << endl;
                 if (acak == SCISSORS) {
                     cout << "Bot choose: Scissors" << endl;
@@ -84,11 +84,11 @@ void play() {
                         break;
                     }
                 } else {
-                    cout<<"Oops, something went wrong!"<<endl;
+                    cout << "Oops, something went wrong!" << endl;
                 }
             break;
  
-            case 2:
+            case ROCK:
                 cout << "You choose: Rock" << endl;
                 if (acak == SCISSORS) {
                     cout << "Bot choose: Scissors" << endl;
@@ -116,7 +116,7 @@ void play() {
                 }
             break;
  
-            case 3:
+            case PAPER:
                 cout << "You choose: Paper" << endl;
                 if (acak == SCISSORS) {
                     cout << "Bot choose: Scissors" << endl;
@@ -136,11 +136,11 @@ void play() {
                     } else {
                         break;
                     }
-                } else if (acak == 3) {
+                } else if (acak == PAPER) {
                     cout << "Bot choose: Paper" << endl;
                     cout << "-- DRAW --" << endl;
                 } else {
-                    cout<<"Oops, something went wrong!"<<endl;
+                    cout << "Oops, something went wrong!" << endl;
                 }
             break;
  
