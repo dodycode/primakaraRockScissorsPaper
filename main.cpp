@@ -1,259 +1,189 @@
 #include <iostream>
 #include <stdlib.h>
 #include <time.h>
+#include "CustomStack.h"
  
-#define MAXHEALTH 100
+#define MAX_HEALTH 100
+#define HEALTH 5
+
+// DEFINISIKAN VARIABLE ANGKA YANG AKAN DIGUNAKAN AGAR LEBIH MUDAH DIBACA
+#define SCISSORS 1
+#define ROCK 2
+#define PAPER 3
+
+#define START_GAME 1
+#define EXIT_GAME 2
  
 using namespace std;
+
+void tampilStackDarah(CustomStack<string> darahPemain, CustomStack<string> darahBot) {
+    // Munculkan status darah
+    cout << "Your health: ";
+    while (!darahPemain.isEmpty()) {
+        cout << " " << darahPemain.getTop() << " ";
+        darahPemain.pop();
+    }
+    cout << endl;
  
-int menu, acak, pil;
- 
-typedef struct{
-    string icon;
-}icon;
- 
-typedef struct{
-    icon item[MAXHEALTH];
-    int count;
-}stack;
- 
-stack darahPemain;
-stack darahBot;
- 
- 
-//Fungsi STACK
-void initializestack(stack *s)
-{
-    s->count = 0;
+    cout << "BOT Health: ";
+    while (!darahBot.isEmpty()) {
+        cout << " " << darahBot.getTop() << " ";
+        darahBot.pop();
+    }
+    cout << endl;
 }
+
+void play() {
+	CustomStack<string> darahPemain(MAX_HEALTH);
+	CustomStack<string> darahBot(MAX_HEALTH);
  
-bool empty(stack s)
-{
-    return (s.count == 0);
-}
+    // Inisialisasi darah
+    for (int i = 0; i < HEALTH; i++) {
+    	darahPemain.push("*");
+    	darahBot.push("*");
+	}
  
-bool full(stack s)
-{
-    return (s.count == MAXHEALTH);
-}
- 
-void push(string x, stack *s)
-{
-    if (full(*s)) {
-        printf("\n");
-    }
-    else
-    {
-        s->count++;
-        s->item[s->count].icon = x;
-    }
-}
- 
-icon pop(stack *s)
-{
-    if (empty(*s)) { //update
-        printf("There's no health.\n");
-    }
-    else
-    {
-        icon temp = (s->item[s->count]);
-        s->count--;
-        return temp;
-    }
-}
- 
-icon peak(stack s) {
-    if (empty(s)) {//update
-        printf("There's no health.\n");
-    }
-    else
-        return(s.item[s.count]);
-}
- 
-void defaultHealth(stack *s)
-{
-    //default di set 5
-    for(int i=0; i<5; i++)
-    {
-        push("*", s);
-    }
-}
- 
-void tampilStackDarah(stack p, stack b, stack tempDarahPemain, stack tempDarahBot)
-{
-    //munculkan
-    cout<<"Your health: ";
-    while(!empty(p)){
-        cout<<" "<<peak(p).icon<<" ";
-        push(pop(&p).icon, &tempDarahPemain);
-    }
-    cout<<endl;
- 
-    cout<<"BOT Health: ";
-    while(!empty(b)){
-        cout<<" "<<peak(b).icon<<" ";
-        push(pop(&b).icon, &tempDarahBot);
-    }
-    cout<<endl;
- 
-    //kembalikan lagi semuanya
-    while (!empty(tempDarahPemain)) {
-        push(pop(&tempDarahPemain).icon, &p);
-    }
- 
-    while (!empty(tempDarahBot)) {
-        push(pop(&tempDarahBot).icon, &b);
-    }
-}
- 
-void play(stack *p, stack *b)
-{
-    // siapkan temp utk peak darah dari stack
-    stack tempDarahPemain;
-    stack tempDarahBot;
-    initializestack(&tempDarahBot);
-    initializestack(&tempDarahPemain);
- 
-    defaultHealth(p);
-    defaultHealth(b);
- 
-    srand(time(NULL));
+    srand(time(0));
     int round = 0;
  
-    while(!empty(*p) && !empty(*b)){
+    while (!darahPemain.isEmpty() && !darahBot.isEmpty()){
         system("cls");
-        tampilStackDarah(*p,*b,tempDarahPemain,tempDarahBot);
+        tampilStackDarah(darahPemain, darahBot);
         round++;
-        acak = rand()%3 + 1;
-        cout<<endl;
-        cout<<"Round: "<<round<<endl;
-        cout<<"1. Scissors"<<endl;
-        cout<<"2. Rock"<<endl;
-        cout<<"3. Paper"<<endl;
-        cout<<"PLease choose: ";cin>>pil;
-        switch(pil){
-            case 1:
-                cout<<"You choose: Scissors"<<endl;
-                if (acak == 1) {
-                    cout<<"Bot choose: Scissors"<<endl;
-                    cout<<"-- DRAW --"<<endl;
-                }else if(acak == 2) {
-                    cout<<"Bot choose: Rock"<<endl;
-                    cout<<"-- Oops haha, BOT win! Don't give up!' --"<<endl;
-                    if(!empty(*p)){
-                        //kurangi darah pemain
-                        pop(p);
-                    }else {
+        int acak = rand() % 3 + 1;
+        cout << endl;
+        cout << "Round: " << round << endl;
+        cout << "1. Scissors" << endl;
+        cout << "2. Rock" << endl;
+        cout << "3. Paper" << endl;
+        
+		int pil;
+        cout << "Please choose: "; cin >> pil;
+        switch (pil) {
+            case SCISSORS:
+                cout << "You choose: Scissors" << endl;
+                if (acak == SCISSORS) {
+                    cout << "Bot choose: Scissors" << endl;
+                    cout << "-- DRAW --" <<endl;
+                } else if (acak == ROCK) {
+                    cout << "Bot choose: Rock" << endl;
+                    cout << "-- Oops haha, BOT win! Don't give up!' --" << endl;
+                    if (!darahPemain.isEmpty()) {
+                        // Kurangi darah pemain
+                        darahPemain.pop();
+                    } else {
+						break;
+                    }
+                } else if (acak == PAPER) {
+                    cout << "Bot choose: Paper" << endl;
+                    cout << "-- Wow, you defeat BOT!" <<endl;
+                    if (!darahBot.isEmpty()) {
+                        // Kurangi darah bot
+                        darahBot.pop();
+                    } else {
                         break;
                     }
-                }else if(acak == 3) {
-                    cout<<"Bot choose: Paper"<<endl;
-                    cout<<"-- Wow, you defeat BOT!"<<endl;
-                    if(!empty(*b)){
-                        //kurangi darah bot
-                        pop(b);
-                    }else{
-                        break;
-                    }
-                }else{
-                    cout<<"Oops, something went wrong!"<<endl;
+                } else {
+                    cout << "Oops, something went wrong!" << endl;
                 }
             break;
  
-            case 2:
-                cout<<"You choose: Rock"<<endl;
-                if (acak == 1) {
-                    cout<<"Bot choose: Scissors"<<endl;
-                    cout<<"-- Wow, you defeat BOT! --"<<endl;
-                    if(!empty(*b)){
-                        //kurangi darah bot
-                        pop(b);
-                    }else{
+            case ROCK:
+                cout << "You choose: Rock" << endl;
+                if (acak == SCISSORS) {
+                    cout << "Bot choose: Scissors" << endl;
+                    cout << "-- Wow, you defeat BOT! --" << endl;
+                    if (!darahBot.isEmpty()) {
+                        // Kurangi darah bot
+                        darahBot.pop();
+                    } else {
                         break;
                     }
-                }else if(acak == 2) {
-                    cout<<"Bot choose: Rock"<<endl;
-                    cout<<"-- DRAW --"<<endl;
-                }else if(acak == 3) {
-                    cout<<"Bot choose: Paper"<<endl;
-                    cout<<"-- Oops haha, BOT win! Don't give up!' --"<<endl;
-                    if(!empty(*p)){
-                        //kurangi darah pemain
-                        pop(p);
-                    }else {
+                } else if (acak == ROCK) {
+                    cout << "Bot choose: Rock" << endl;
+                    cout << "-- DRAW --" << endl;
+                } else if (acak == PAPER) {
+                    cout << "Bot choose: Paper" << endl;
+                    cout << "-- Oops haha, BOT win! Don't give up!' --" << endl;
+                    if (!darahPemain.isEmpty()) {
+                        // Kurangi darah pemain
+                        darahPemain.pop();
+                    } else {
                         break;
                     }
-                }else{
-                    cout<<"Oops, something went wrong!"<<endl;
+                } else {
+                    cout << "Oops, something went wrong!" << endl;
                 }
             break;
  
-            case 3:
-                cout<<"You choose: Paper"<<endl;
-                if (acak == 1) {
-                    cout<<"Bot choose: Scissors"<<endl;
-                    cout<<"-- Oops haha, BOT win! Don't give up!' --"<<endl;
-                    if(!empty(*p)){
-                        //kurangi darah pemain
-                        pop(p);
-                    }else{
+            case PAPER:
+                cout << "You choose: Paper" << endl;
+                if (acak == SCISSORS) {
+                    cout << "Bot choose: Scissors" << endl;
+                    cout << "-- Oops haha, BOT win! Don't give up!' --" << endl;
+                    if (!darahPemain.isEmpty()) {
+                        // Kurangi darah pemain
+                        darahPemain.pop();
+                    } else {
                         break;
                     }
-                }else if(acak == 2) {
-                    cout<<"Bot choose: Rock"<<endl;
-                    cout<<"-- Wow! You defeat BOT! --"<<endl;
-                    if(!empty(*b)){
-                        //kurangi darah bot
-                        pop(b);
-                    }else {
+                } else if (acak == ROCK) {
+                    cout << "Bot choose: Rock" << endl;
+                    cout << "-- Wow! You defeat BOT! --" << endl;
+                    if (!darahBot.isEmpty()) {
+                        // Kurangi darah bot
+                        darahBot.pop();
+                    } else {
                         break;
                     }
-                }else if(acak == 3) {
-                    cout<<"Bot choose: Paper"<<endl;
-                    cout<<"-- DRAW --"<<endl;
-                }else{
-                    cout<<"Oops, something went wrong!"<<endl;
+                } else if (acak == PAPER) {
+                    cout << "Bot choose: Paper" << endl;
+                    cout << "-- DRAW --" << endl;
+                } else {
+                    cout << "Oops, something went wrong!" << endl;
                 }
             break;
  
-            default: cout<<"Please choose correctly!"<<endl; break;
+            default:
+				cout << "Please choose correctly! " << endl;
+				
             system("pause");
         }
         system("pause");
     }
+    
+    // Setelah game selesai, keluarkan pesan
+    cout << endl;
+    if (darahPemain.isEmpty()) {
+        cout << "Game over!" << endl;
+    } else if (darahBot.isEmpty()) {
+        cout << "Congrats! You're win!" << endl;
+    } else {
+        cout << "Oops! something went wrong!" << endl;
+    }
+    system("pause");
 }
- 
+
 int main(int argc, char** argv) {
-    bool ulang = true;
-    initializestack(&darahPemain);
-    initializestack(&darahBot);
-    do{
+	bool ulang = true;
+    do {
         system("cls");
-        cout<<"===============Primakara Scissors, Rock and Paper=================="<<endl;
-        cout<<"1. Start Game"<<endl;
-        cout<<"2. Exit Game"<<endl;
-        cout<<"Please choose: ";cin>>menu;
-        switch(menu){
-            case 1:
-                //Jalankan permainan
-                play(&darahPemain, &darahBot);
-               
-                //Setelah game selesai, keluarkan pesan
-                cout<<endl;
-                if(empty(darahPemain)){
-                    cout<<"Game over!"<<endl;
-                }else if(empty(darahBot)) {
-                    cout<<"Congrats! You're win!"<<endl;
-                }else{
-                    cout<<"Oops! something went wrong!"<<endl;
-                }
-                system("pause");
+        cout << "=============== Primakara Scissors, Rock and Paper ==================" << endl;
+        cout << "1. Start Game" << endl;
+        cout << "2. Exit Game" << endl;
+        
+		int menu;
+        cout << "Please choose: "; cin >> menu;
+        switch (menu) {
+            case START_GAME:
+                // Jalankan permainan
+                play();
             break;
  
-            case 2:
+            case EXIT_GAME:
                 ulang = false;
-                cout<<"Game will close shortly..."<<endl;
+                cout << "Game will close shortly..." << endl;
             break;
         }
-    }while(ulang);
+    } while (ulang);
 }
