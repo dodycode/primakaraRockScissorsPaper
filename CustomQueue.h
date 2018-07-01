@@ -1,5 +1,6 @@
 /* 
 	CUSTOM QUEUE MADE BY WAHYU BUDI SAPUTRA
+	https://github.com/wahyubucil
 */
 
 #ifndef CUSTOMQUEUE_H
