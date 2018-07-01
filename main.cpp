@@ -2,9 +2,11 @@
 #include <stdlib.h>
 #include <time.h>
 #include "CustomStack.h"
+#include "CustomQueue.h"
  
 #define MAX_HEALTH 100
 #define HEALTH 5
+#define GUESS_IT_UNTIL_END_ROUND 5
 
 // DEFINISIKAN VARIABLE ANGKA YANG AKAN DIGUNAKAN AGAR LEBIH MUDAH DIBACA
 #define SCISSORS 1
@@ -19,8 +21,19 @@
 #define GAME_MENU_SPESIAL_NORMAL 3
 #define GAME_MENU_SPESIAL_GUESS_IT_UNTIL_END 4
 #define GAME_MENU_EXIT 5
+
+#define WIN 1
+#define LOSE 2
+#define DRAW 3
+#define ERROR 4
  
 using namespace std;
+
+struct CompareResult {
+	int isPlayerWin;
+	string playerChoice;
+	string botChoice;
+};
 
 void tampilStackDarah(CustomStack<string> darahPemain, CustomStack<string> darahBot) {
     // Munculkan status darah
@@ -64,7 +77,9 @@ void normalGame() {
         cout << "3. Paper" << endl;
         
 		int pil;
-        cout << "Please choose: "; cin >> pil;
+		do {
+			cout << "Please choose: "; cin >> pil;
+		} while (pil < SCISSORS || pil > PAPER);
         switch (pil) {
             case SCISSORS:
                 cout << "You choose: Scissors" << endl;
@@ -170,36 +185,150 @@ void normalGame() {
     system("pause");
 }
 
-void guessItUntilEndGame() {
-	CustomStack<string> darahPemain(MAX_HEALTH);
-	CustomStack<string> darahBot(MAX_HEALTH);
- 
-    // Inisialisasi darah
-    for (int i = 0; i < HEALTH; i++) {
-    	darahPemain.push("*");
-    	darahBot.push("*");
+CompareResult compareChoices(int playerChoice, int botChoice) {
+	CompareResult output;
+	
+	if (botChoice == SCISSORS) {
+    	output.botChoice = "Scissors";
+    } else if (botChoice == ROCK) {
+    	output.botChoice = "Rock";
+    } else if (botChoice == PAPER) {
+    	output.botChoice = "Paper";
+    }
+    
+	switch (playerChoice) {
+	    case SCISSORS:
+	        output.playerChoice = "Scissors";
+	        if (botChoice == SCISSORS) {
+	            output.isPlayerWin = DRAW;
+	        } else if (botChoice == ROCK) {
+	            output.isPlayerWin = LOSE;
+	        } else if (botChoice == PAPER) {
+	            output.isPlayerWin = WIN;
+	        } else {
+	            output.isPlayerWin = ERROR;
+	        }
+	    	break;
+	
+	    case ROCK:
+	        output.playerChoice = "Rock";
+	        if (botChoice == SCISSORS) {
+	            output.isPlayerWin = WIN;
+	        } else if (botChoice == ROCK) {
+	            output.isPlayerWin = DRAW;
+	        } else if (botChoice == PAPER) {
+	            output.isPlayerWin = LOSE;
+	        } else {
+	            output.isPlayerWin = ERROR;
+	        }
+	    	break;
+	
+	    case PAPER:
+	        output.playerChoice = "Paper";
+	        if (botChoice == SCISSORS) {
+	            output.isPlayerWin = LOSE;
+	        } else if (botChoice == ROCK) {
+	            output.isPlayerWin = WIN;
+	        } else if (botChoice == PAPER) {
+	            output.isPlayerWin = DRAW;
+	        } else {
+	            output.isPlayerWin = ERROR;
+	        }
+	    	break;
+	
+	    default:
+			output.isPlayerWin = ERROR;
 	}
- 
+			
+	return output;
+}
+
+void guessItUntilEndGame() {
+	system("cls");
+	cout << "Choose it for " << GUESS_IT_UNTIL_END_ROUND << " times" << endl;
+	
     srand(time(0));
     
-    while (!darahPemain.isEmpty() && !darahBot.isEmpty()) {
-    	
-    }
+    CustomQueue<int> pilihanBot(GUESS_IT_UNTIL_END_ROUND);
+    for (int i = 0; i < GUESS_IT_UNTIL_END_ROUND; i++) {
+    	int acak = rand() % 3 + 1;
+    	pilihanBot.enqueue(acak);
+	}
+	
+    cout << endl;
+    cout << "1. Scissors" << endl;
+    cout << "2. Rock" << endl;
+    cout << "3. Paper" << endl;
+    cout << endl;
+    
+    CustomQueue<int> pilihanPemain(GUESS_IT_UNTIL_END_ROUND);
+    for (int i = 0; i < GUESS_IT_UNTIL_END_ROUND; i++) {
+    	int pilihan;
+    	do {
+			cout << "Choice " << i + 1 << ": "; cin >> pilihan;
+		} while (pilihan < SCISSORS || pilihan > PAPER);
+		pilihanPemain.enqueue(pilihan);
+	}
+	cout << endl;
+	
+	int playerScore = 0;
+	int botScore = 0;
+	for (int i = 0; i < GUESS_IT_UNTIL_END_ROUND; i++) {
+		int pilihanPemainNow = pilihanPemain.dequeue();
+		int pilihanBotNow = pilihanBot.dequeue();
+		CompareResult compareResult = compareChoices(pilihanPemainNow, pilihanBotNow);
+		string winStatus;
+		if (compareResult.isPlayerWin == WIN) {
+			winStatus = "Win";
+			playerScore++;
+		} else if (compareResult.isPlayerWin == LOSE) {
+			winStatus = "Lose";
+			botScore++;
+		} else {
+			winStatus = "Draw";
+		}
+		
+    	cout << "Fight " << i + 1 <<": ";
+    	cout << compareResult.playerChoice;
+    	cout << " vs ";
+    	cout << compareResult.botChoice;
+    	cout << " (" << winStatus << ")";
+    	cout << endl;
+	}
+	
+	cout << endl;
+	cout << "Score: ";
+	cout << playerScore;
+	cout << " vs ";
+	cout << botScore;
+	cout << endl;
+	
+	if (playerScore > botScore) {
+		cout << "YOU WIN!";
+	} else if (playerScore < botScore) {
+		cout << "YOU LOSE!";
+	} else {
+		cout << "DRAW!";
+	}
+	
+	cout << endl << endl;
+	
+	system("pause");
 }
 
 void gameMenu() {
 	bool ulang = true;
 	do {
 		system("cls");
-		cout << "Pilih mode game yang anda inginkan: " << endl;
+		cout << "Choose your game mode:" << endl;
 		cout << "1. Normal" << endl;
 		cout << "2. Guess It Until End" << endl;
 		cout << "3. Spesial (Normal)" << endl;
 		cout << "4. Spesial (Guess It Until End)" << endl;
-		cout << "5. Kembali" << endl;
+		cout << "5. Back" << endl;
 		
 		int gameMenu;
-		cout << "Silahkan pilih : "; cin >> gameMenu;
+		cout << "Please choose: "; cin >> gameMenu;
 		
 		switch (gameMenu) {
 			case GAME_MENU_NORMAL:
