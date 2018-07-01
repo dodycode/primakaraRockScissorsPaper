@@ -13,6 +13,12 @@
 
 #define START_GAME 1
 #define EXIT_GAME 2
+
+#define GAME_MENU_NORMAL 1
+#define GAME_MENU_GUESS_IT_UNTIL_END 2
+#define GAME_MENU_SPESIAL_NORMAL 3
+#define GAME_MENU_SPESIAL_GUESS_IT_UNTIL_END 4
+#define GAME_MENU_EXIT 5
  
 using namespace std;
 
@@ -33,7 +39,7 @@ void tampilStackDarah(CustomStack<string> darahPemain, CustomStack<string> darah
     cout << endl;
 }
 
-void play() {
+void normalGame() {
 	CustomStack<string> darahPemain(MAX_HEALTH);
 	CustomStack<string> darahBot(MAX_HEALTH);
  
@@ -164,7 +170,51 @@ void play() {
     system("pause");
 }
 
-int main(int argc, char** argv) {
+void guessItUntilEndGame() {
+	CustomStack<string> darahPemain(MAX_HEALTH);
+	CustomStack<string> darahBot(MAX_HEALTH);
+ 
+    // Inisialisasi darah
+    for (int i = 0; i < HEALTH; i++) {
+    	darahPemain.push("*");
+    	darahBot.push("*");
+	}
+ 
+    srand(time(0));
+    
+    while (!darahPemain.isEmpty() && !darahBot.isEmpty()) {
+    	
+    }
+}
+
+void gameMenu() {
+	bool ulang = true;
+	do {
+		system("cls");
+		cout << "Pilih mode game yang anda inginkan: " << endl;
+		cout << "1. Normal" << endl;
+		cout << "2. Guess It Until End" << endl;
+		cout << "3. Spesial (Normal)" << endl;
+		cout << "4. Spesial (Guess It Until End)" << endl;
+		cout << "5. Kembali" << endl;
+		
+		int gameMenu;
+		cout << "Silahkan pilih : "; cin >> gameMenu;
+		
+		switch (gameMenu) {
+			case GAME_MENU_NORMAL:
+				normalGame();
+				break;
+			case GAME_MENU_GUESS_IT_UNTIL_END:
+				guessItUntilEndGame();
+				break;
+			case GAME_MENU_EXIT:
+				ulang = false;
+		}
+	} while (ulang);
+}
+
+void mainMenu() {
 	bool ulang = true;
     do {
         system("cls");
@@ -177,7 +227,7 @@ int main(int argc, char** argv) {
         switch (menu) {
             case START_GAME:
                 // Jalankan permainan
-                play();
+				gameMenu();
             break;
  
             case EXIT_GAME:
@@ -186,4 +236,8 @@ int main(int argc, char** argv) {
             break;
         }
     } while (ulang);
+}
+
+int main(int argc, char** argv) {
+	mainMenu();
 }
