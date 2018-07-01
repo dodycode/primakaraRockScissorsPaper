@@ -18,9 +18,8 @@
 
 #define GAME_MENU_NORMAL 1
 #define GAME_MENU_GUESS_IT_UNTIL_END 2
-#define GAME_MENU_SPESIAL_NORMAL 3
-#define GAME_MENU_SPESIAL_GUESS_IT_UNTIL_END 4
-#define GAME_MENU_EXIT 5
+#define GAME_MENU_SPECIAL_NORMAL 3
+#define GAME_MENU_EXIT 4
 
 #define WIN 1
 #define LOSE 2
@@ -93,6 +92,22 @@ CompareResult compareChoices(int playerChoice, int botChoice) {
 	return output;
 }
 
+int specialGameConfig(int playerChoice) {
+	int newBotChoice;
+	
+	if (playerChoice == SCISSORS) {
+		newBotChoice = ROCK;
+	} else if (playerChoice == ROCK) {
+		newBotChoice = PAPER;
+	} else if (playerChoice == PAPER) {
+		newBotChoice = SCISSORS;
+	} else {
+		newBotChoice = playerChoice; // Make it same if the playerChoice is not in that list
+	}
+	
+	return newBotChoice;
+}
+
 void tampilStackDarah(CustomStack<string> darahPemain, CustomStack<string> darahBot) {
     // Munculkan status darah
     cout << "Your health: ";
@@ -110,7 +125,7 @@ void tampilStackDarah(CustomStack<string> darahPemain, CustomStack<string> darah
     cout << endl;
 }
 
-void normalGame() {
+void normalGame(bool isSpecialGame) {
 	CustomStack<string> darahPemain(MAX_HEALTH);
 	CustomStack<string> darahBot(MAX_HEALTH);
  
@@ -125,6 +140,12 @@ void normalGame() {
  
     while (!darahPemain.isEmpty() && !darahBot.isEmpty()){
         system("cls");
+		string gameTitle = "=== NORMAL GAME ===";
+		if (isSpecialGame) {
+			gameTitle = "== SPECIAL NORMAL GAME ==";
+		}
+		cout << gameTitle << endl << endl;
+        
         tampilStackDarah(darahPemain, darahBot);
         round++;
         int acak = rand() % 3 + 1;
@@ -139,6 +160,11 @@ void normalGame() {
 			cout << "Please choose: "; cin >> pil;
 		} while (pil < SCISSORS || pil > PAPER);
 		
+		if (isSpecialGame) { // Jika game mode spesial ubah pilihan acak bot menjadi PASTI MENANG
+			acak = specialGameConfig(pil);
+		}
+		
+		cout << endl;
 		CompareResult compareResult = compareChoices(pil, acak);
 		cout << "You choose: " << compareResult.playerChoice << endl;
 		cout << "Bot choose: " << compareResult.botChoice << endl;
@@ -152,6 +178,7 @@ void normalGame() {
 		} else {
 			cout << "-- DRAW --" <<endl;
 		}
+		cout << endl;
 		
         system("pause");
     }
@@ -160,16 +187,24 @@ void normalGame() {
     cout << endl;
     if (darahPemain.isEmpty()) {
         cout << "Game over!" << endl;
+        if (isSpecialGame) {
+        	cout << "YOU LOSE! AND YOU WILL NEVER WIN!!!" << endl;
+		}
     } else if (darahBot.isEmpty()) {
         cout << "Congrats! You're win!" << endl;
     } else {
         cout << "Oops! something went wrong!" << endl;
     }
+    
+    cout << endl;
     system("pause");
 }
 
 void guessItUntilEndGame() {
 	system("cls");
+	
+	cout << "=== GUESS IT UNTIL END GAME ===" << endl << endl;
+	
 	cout << "Choose it for " << GUESS_IT_UNTIL_END_ROUND << " times" << endl;
 	
     srand(time(0));
@@ -248,19 +283,21 @@ void gameMenu() {
 		cout << "Choose your game mode:" << endl;
 		cout << "1. Normal" << endl;
 		cout << "2. Guess It Until End" << endl;
-		cout << "3. Spesial (Normal)" << endl;
-		cout << "4. Spesial (Guess It Until End)" << endl;
-		cout << "5. Back" << endl;
+		cout << "3. Special Game" << endl;
+		cout << "4. Back" << endl;
 		
 		int gameMenu;
 		cout << "Please choose: "; cin >> gameMenu;
 		
 		switch (gameMenu) {
 			case GAME_MENU_NORMAL:
-				normalGame();
+				normalGame(false);
 				break;
 			case GAME_MENU_GUESS_IT_UNTIL_END:
 				guessItUntilEndGame();
+				break;
+			case GAME_MENU_SPECIAL_NORMAL:
+				normalGame(true);
 				break;
 			case GAME_MENU_EXIT:
 				ulang = false;
