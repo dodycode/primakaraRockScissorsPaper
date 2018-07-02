@@ -19,7 +19,8 @@
 #define GAME_MENU_NORMAL 1
 #define GAME_MENU_GUESS_IT_UNTIL_END 2
 #define GAME_MENU_SPECIAL_NORMAL 3
-#define GAME_MENU_EXIT 4
+#define GAME_MENU_SPECIAL_GUESS_IT_UNTIL_END 4
+#define GAME_MENU_EXIT 5
 
 #define WIN 1
 #define LOSE 2
@@ -200,20 +201,18 @@ void normalGame(bool isSpecialGame) {
     system("pause");
 }
 
-void guessItUntilEndGame() {
+void guessItUntilEndGame(bool isSpecialGame) {
 	system("cls");
 	
-	cout << "=== GUESS IT UNTIL END GAME ===" << endl << endl;
+	string gameTitle = "=== GUESS IT UNTIL END GAME ===";
+	if (isSpecialGame) {
+		gameTitle = "== SPECIAL GUESS IT UNTIL END GAME ==";
+	}
+	cout << gameTitle << endl << endl;
 	
 	cout << "Choose it for " << GUESS_IT_UNTIL_END_ROUND << " times" << endl;
 	
     srand(time(0));
-    
-    CustomQueue<int> pilihanBot(GUESS_IT_UNTIL_END_ROUND);
-    for (int i = 0; i < GUESS_IT_UNTIL_END_ROUND; i++) {
-    	int acak = rand() % 3 + 1;
-    	pilihanBot.enqueue(acak);
-	}
 	
     cout << endl;
     cout << "1. Scissors" << endl;
@@ -229,6 +228,20 @@ void guessItUntilEndGame() {
 		} while (pilihan < SCISSORS || pilihan > PAPER);
 		pilihanPemain.enqueue(pilihan);
 	}
+	
+	CustomQueue<int> pilihanBot(GUESS_IT_UNTIL_END_ROUND);
+    for (int i = 0; i < GUESS_IT_UNTIL_END_ROUND; i++) {
+    	int acak = rand() % 3 + 1;
+    	
+    	if (isSpecialGame) {
+    		int selectedPlayerChoice = pilihanPemain.dequeue();
+    		acak = specialGameConfig(selectedPlayerChoice);
+    		pilihanPemain.enqueue(selectedPlayerChoice);
+		}
+    	
+    	pilihanBot.enqueue(acak);
+	}
+	
 	cout << endl;
 	
 	int playerScore = 0;
@@ -267,6 +280,9 @@ void guessItUntilEndGame() {
 		cout << "YOU WIN!";
 	} else if (playerScore < botScore) {
 		cout << "YOU LOSE!";
+		if (isSpecialGame) {
+			cout << endl << "AND YOU WILL NEVER WIN!!!" << endl;
+		}
 	} else {
 		cout << "DRAW!";
 	}
@@ -283,8 +299,9 @@ void gameMenu() {
 		cout << "Choose your game mode:" << endl;
 		cout << "1. Normal" << endl;
 		cout << "2. Guess It Until End" << endl;
-		cout << "3. Special Game" << endl;
-		cout << "4. Back" << endl;
+		cout << "3. Special (Normal)" << endl;
+		cout << "4. Special (Guess It Until End)" << endl;
+		cout << "5. Back" << endl;
 		
 		int gameMenu;
 		cout << "Please choose: "; cin >> gameMenu;
@@ -294,10 +311,13 @@ void gameMenu() {
 				normalGame(false);
 				break;
 			case GAME_MENU_GUESS_IT_UNTIL_END:
-				guessItUntilEndGame();
+				guessItUntilEndGame(false);
 				break;
 			case GAME_MENU_SPECIAL_NORMAL:
 				normalGame(true);
+				break;
+			case GAME_MENU_SPECIAL_GUESS_IT_UNTIL_END:
+				guessItUntilEndGame(true);
 				break;
 			case GAME_MENU_EXIT:
 				ulang = false;
