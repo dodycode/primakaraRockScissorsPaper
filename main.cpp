@@ -14,7 +14,8 @@
 #define PAPER 3
 
 #define START_GAME 1
-#define EXIT_GAME 2
+#define SHOW_AUTHORS 2
+#define EXIT_GAME 3
 
 #define GAME_MENU_NORMAL 1
 #define GAME_MENU_GUESS_IT_UNTIL_END 2
@@ -28,6 +29,12 @@
 #define ERROR 4
  
 using namespace std;
+
+struct Author {
+	string name;
+	string nim;
+	string githubUsername;
+};
 
 struct CompareResult {
 	int isPlayerWin;
@@ -325,13 +332,61 @@ void gameMenu() {
 	} while (ulang);
 }
 
+void printAuthor(int index, Author author) {
+	cout << index << ". " << author.name;
+	cout << " (" << author.nim << ") ";
+	cout << "https://github.com/" << author.githubUsername;
+	cout << endl;
+}
+
+void showAuthors() {
+	system("cls");
+	
+	cout << "=== THE AUTHORS ===" << endl << endl;
+	
+	Author wahyu;
+	wahyu.name = "I Gede Wahyu Budi Saputra";
+	wahyu.nim = "1701020002";
+	wahyu.githubUsername = "wahyubucil";
+	
+	Author marvel;
+	marvel.name = "Marvel Alexius";
+	marvel.nim = "1701020041";
+	marvel.githubUsername = "marvelalexius";
+	
+	Author dharmaSastra;
+	dharmaSastra.name = "I Made Dharma Sastra";
+	dharmaSastra.nim = "1701020004";
+	dharmaSastra.githubUsername = "dharmasastra";
+	
+	Author adiva;
+	adiva.name = "Komang Bagus Adiva Prayoga";
+	adiva.nim = "1701020042";
+	adiva.githubUsername = "dedevava";
+	
+	Author dodypras;
+	dodypras.name = "Dody Prasetyo";
+	dodypras.nim = "1701020017";
+	dodypras.githubUsername = "kirizu336";
+	
+	printAuthor(1, wahyu);
+	printAuthor(2, marvel);
+	printAuthor(3, dharmaSastra);
+	printAuthor(4, adiva);
+	printAuthor(5, dodypras);
+	
+	cout << endl << endl;
+	system("pause");
+}
+
 void mainMenu() {
 	bool ulang = true;
     do {
         system("cls");
         cout << "=============== Primakara Scissors, Rock and Paper ==================" << endl;
         cout << "1. Start Game" << endl;
-        cout << "2. Exit Game" << endl;
+        cout << "2. Authors" << endl;
+        cout << "3. Exit Game" << endl;
         
 		int menu;
         cout << "Please choose: "; cin >> menu;
@@ -339,12 +394,16 @@ void mainMenu() {
             case START_GAME:
                 // Jalankan permainan
 				gameMenu();
-            break;
+            	break;
+            
+            case SHOW_AUTHORS:
+            	showAuthors();
+            	break;
  
             case EXIT_GAME:
                 ulang = false;
                 cout << "Game will close shortly..." << endl;
-            break;
+            	break;
         }
     } while (ulang);
 }
