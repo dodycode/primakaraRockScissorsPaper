@@ -375,7 +375,7 @@ void showAuthors() {
 	printAuthor(4, adiva);
 	printAuthor(5, dodypras);
 	
-	cout << endl << endl;
+	cout << endl;
 	system("pause");
 }
 
