@@ -303,16 +303,18 @@ void gameMenu() {
 	bool ulang = true;
 	do {
 		system("cls");
-		
-		cout << "Choose your game mode:" << endl;
-		cout << "1. Normal" << endl;
-		cout << "2. Guess It Until End" << endl;
-		cout << "3. Special (Normal)" << endl;
-		cout << "4. Special (Guess It Until End)" << endl;
-		cout << "5. Back" << endl;
+		cout << "---------------------------------------------------------------------" << endl;
+        cout << "|               Primakara Scissors, Rock and Paper                  |" << endl;
+		cout << "---------------------------------------------------------------------" << endl << endl;
+		cout << "               Choose your game mode:                                " << endl;
+		cout << "               1. Normal                                             " << endl;
+		cout << "               2. Guess It Until End                                 " << endl;
+		cout << "               3. Special (Normal)                                   " << endl;
+		cout << "               4. Special (Guess It Until End)                       " << endl;
+		cout << "               5. Back                                               " << endl;
 		
 		int gameMenu;
-		cout << "Please choose: "; cin >> gameMenu;
+		cout << "               Please choose: "; cin >> gameMenu;
 		
 		switch (gameMenu) {
 			case GAME_MENU_NORMAL:
@@ -342,8 +344,9 @@ void printAuthor(int index, Author author) {
 
 void showAuthors() {
 	system("cls");
-	
-	cout << "=== THE AUTHORS ===" << endl << endl;
+	cout << "----------------------------------------------------------------------------" << endl;
+	cout << "|                                 THE AUTHORS                              |" << endl;
+	cout << "----------------------------------------------------------------------------" << endl << endl;
 	
 	Author wahyu;
 	wahyu.name = "I Gede Wahyu Budi Saputra";
@@ -384,13 +387,15 @@ void mainMenu() {
 	bool ulang = true;
     do {
         system("cls");
-        cout << "=============== Primakara Scissors, Rock and Paper ==================" << endl;
-        cout << "1. Start Game" << endl;
-        cout << "2. Authors" << endl;
-        cout << "3. Exit Game" << endl;
+		cout << "---------------------------------------------------------------------" << endl;
+        cout << "|               Primakara Scissors, Rock and Paper                  |" << endl;
+		cout << "---------------------------------------------------------------------" << endl;
+        cout << "               1. Start Game                                       " << endl;
+        cout << "               2. Authors                                          " << endl;
+        cout << "               3. Exit Game                                        " << endl;
         
 		int menu;
-        cout << "Please choose: "; cin >> menu;
+        cout << "               Please choose: "; cin >> menu;
         switch (menu) {
             case START_GAME:
                 // Jalankan permainan
