@@ -303,6 +303,7 @@ void gameMenu() {
 	bool ulang = true;
 	do {
 		system("cls");
+		
 		cout << "Choose your game mode:" << endl;
 		cout << "1. Normal" << endl;
 		cout << "2. Guess It Until End" << endl;
